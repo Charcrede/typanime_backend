@@ -1,7 +1,13 @@
 package com.typanime.typanime_backend.controller;
 
 import com.typanime.typanime_backend.model.Challenge;
+import com.typanime.typanime_backend.model.Citation;
+import com.typanime.typanime_backend.model.Synopsis;
+import com.typanime.typanime_backend.dto.ChallengeDTO;
 import com.typanime.typanime_backend.repository.ChallengeRepository;
+import com.typanime.typanime_backend.repository.CitationRepository;
+import com.typanime.typanime_backend.repository.SynopsisRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,9 +23,18 @@ public class ChallengeController {
 
     @Autowired
     private ChallengeRepository challengeRepository;
+    private CitationRepository citationRepository;
+    private SynopsisRepository synopsisRepository;
 
+
+    @Autowired
+    public ChallengeController(SynopsisRepository synopsisRepository, CitationRepository citationRepository, ChallengeRepository challengeRepository) {
+        this.synopsisRepository = synopsisRepository;
+        this.citationRepository = citationRepository;
+        this.challengeRepository = challengeRepository;
+    }
     // Récupérer tous les challenges avec pagination
-    @GetMapping
+    @GetMapping("/all")
     public Page<Challenge> getChallenges(@RequestParam(defaultValue = "0") int page, 
                                          @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -38,8 +53,20 @@ public class ChallengeController {
     }
 
     // Créer un nouveau challenge
-    @PostMapping
-    public Challenge createChallenge(@RequestBody Challenge challenge) {
+    @PostMapping("/create")
+    public Challenge createChallenge(@RequestBody ChallengeDTO challengeDTO) {
+        Challenge challenge = new Challenge();
+        challenge.setName(challengeDTO.getName());
+        Citation citation ;
+        Synopsis synopsis ;
+        if (challengeDTO.getCitationId() != null && citationRepository.findById(challengeDTO.getCitationId()).isPresent()) {
+            citation = citationRepository.findById(challengeDTO.getCitationId()).get();
+            challenge.setCitation(citation);
+        }
+        if (challengeDTO.getSynopsisId() != null && synopsisRepository.findById(challengeDTO.getSynopsisId()).isPresent()) {
+            synopsis = synopsisRepository.findById(challengeDTO.getSynopsisId()).get();
+            challenge.setSynopsis(synopsis);
+        }
         return challengeRepository.save(challenge);
     }
 

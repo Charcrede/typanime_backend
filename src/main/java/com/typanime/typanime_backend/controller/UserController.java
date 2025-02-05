@@ -16,12 +16,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @GetMapping("/user")
-    public String getCurrentUser() {
+    public User getCurrentUser() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println(authentication.getName());
         User user = userRepository.findByUsername(authentication.getName());
-        return "{id : " + user.getId() +" username : " + user.getUsername() + ", email : " + user.getEmail() + " }";
-        // return authentication.getName();
+        // return "{id : " + user.getId() +" username : " + user.getUsername() + ", email : " + user.getEmail() + " }";
+        return user;
     }
 }

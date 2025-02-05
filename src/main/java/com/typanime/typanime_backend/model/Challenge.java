@@ -11,6 +11,7 @@ public class Challenge {
     private Long id;
 
     @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("speed DESC")
     private List<Stat> statList;
 
     @ManyToOne
@@ -22,6 +23,19 @@ public class Challenge {
     private Synopsis synopsis;
 
     private Long liveTime;  // Utiliser Long au lieu de long pour permettre null
+
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Column(nullable = true, columnDefinition = "INT DEFAULT 0")
+    private int members;
 
     // Getters et Setters
 

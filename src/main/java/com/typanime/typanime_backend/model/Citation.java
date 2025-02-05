@@ -13,10 +13,10 @@ public class Citation {
     private String persoName;
     private String animeName;
     private String url;
+
+    @Column(columnDefinition = "TEXT")
     private String text;
 
-    @OneToMany(mappedBy = "citation", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Challenge> challenges;
 
     public Citation() {
        
@@ -66,11 +66,4 @@ public class Citation {
         this.url = url;
     }
 
-    public List<Challenge> getChallenges() {
-        return challenges;
-    }
-
-    public void setChallenges(List<Challenge> challenges) {
-        this.challenges = challenges;
-    }
 }

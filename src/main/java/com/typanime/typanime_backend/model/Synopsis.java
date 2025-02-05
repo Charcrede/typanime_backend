@@ -12,6 +12,8 @@ public class Synopsis {
 
     private String anime;
     private String url;
+
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @OneToMany(mappedBy = "synopsis", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -57,11 +59,4 @@ public class Synopsis {
         this.url = url;
     }
 
-    public List<Challenge> getChallenges() {
-        return challenges;
-    }
-
-    public void setChallenges(List<Challenge> challenges) {
-        this.challenges = challenges;
-    }
 }

@@ -3,10 +3,15 @@ package com.typanime.typanime_backend.controller;
 import com.typanime.typanime_backend.model.Citation;
 import com.typanime.typanime_backend.repository.CitationRepository;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+// import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +24,14 @@ public class CitationController {
 
     // Endpoint pour récupérer les citations avec pagination
     @GetMapping("/all")
-    public Page<Citation> getCitations(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        return citationRepository.findAll(pageable);
+    public PagedModel<EntityModel<Citation>> getCitations(Pageable pageable,
+                                                          PagedResourcesAssembler<Citation> assembler) {
+        return assembler.toModel(citationRepository.findAll(pageable));
+    }
+
+    @GetMapping("/allC")
+    public List<Citation> getAll() {
+        return citationRepository.findAll();
     }
 
     // Récupérer une citation par ID
