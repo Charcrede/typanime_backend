@@ -1,6 +1,5 @@
 package com.typanime.typanime_backend.model;
 
-import java.util.List;
 import jakarta.persistence.*;
 
 @Entity
